@@ -14,7 +14,7 @@ class ToolConfEditor {
 
     boolean minimize = false
 
-    void process(File conf, File include, OutputStream out, List<String> files) {
+    void process(File conf, File include, String output, List<String> files) {
         logger.info("parsing the config file {}", conf.path)
         XmlParser parser = new XmlParser()
         Node toolbox = parser.parse(conf)
@@ -35,7 +35,17 @@ class ToolConfEditor {
             println "--minimize has been set."
             toolbox = minimize(toolbox)
         }
-        serialize(toolbox)
+        PrintStream out = System.out
+        boolean close = false
+        if (output) {
+            out = new PrintStream(output)
+            close = true
+        }
+        serialize(toolbox, out)
+        if (close) {
+            out.flush()
+            out.close()
+        }
     }
 
     Node minimize(Node node) {
@@ -167,21 +177,23 @@ $COPY
             }
         }
 
-        PrintStream out = System.out
-        if (params.o) {
-            File outputFile = new File(params.o)
-            File parent = outputFile.parentFile
-            if (!parent.exists()) {
-                if (!parent.mkdirs()) {
-                    println "Unable to write to ${parent.path}"
-                    return
-                }
-            }
-            out = new FileOutputStream(outputFile)
-        }
+//        PrintStream out = System.out
+//        boolean close = false
+//        if (params.o) {
+//            File outputFile = new File(params.o)
+//            File parent = outputFile.parentFile
+//            if (!parent.exists()) {
+//                if (!parent.mkdirs()) {
+//                    println "Unable to write to ${parent.path}"
+//                    return
+//                }
+//            }
+//            out = new PrintStream(outputFile)
+//            close = true
+//        }
 
         ToolConfEditor app = new ToolConfEditor()
         app.minimize = params.m
-        app.process(toolConfFile, includeDir, out, params.arguments())
+        app.process(toolConfFile, includeDir, params.o, params.arguments())
     }
 }
