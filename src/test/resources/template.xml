@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='utf-8'?>
+<toolbox>
+    <section id="local.data" name="Local Data">
+        <tool file="data_source/upload.xml"/>
+    </section>
+</toolbox>
