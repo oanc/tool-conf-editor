@@ -10,7 +10,7 @@
     </parent>
     <groupId>org.anc.lapps.galaxy</groupId>
     <artifactId>tool-conf-editor</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.1</version>
     <name>ToolConf Editory</name>
     <description>A Groovy DSL for modifying Galaxy's tool_conf.xml file(s).</description>
     <inceptionYear>2016</inceptionYear>
