@@ -12,6 +12,7 @@ class ToolConfEditor {
 
     static final String COPY = "Copyright ${0xa9 as char} 2016 The Language Application Grid"
 
+    // Whether or not empty sections should be included in the output.
     boolean minimize = false
 
     void process(File conf, File include, String output, List<String> files) {
@@ -30,9 +31,8 @@ class ToolConfEditor {
         }
 
         logger.info("serializing the XML")
-        //serialize(toolbox)
         if (minimize) {
-            println "--minimize has been set."
+            logger.debug "--minimize has been set."
             toolbox = minimize(toolbox)
         }
         PrintStream out = System.out
@@ -55,7 +55,7 @@ class ToolConfEditor {
                 result.append(section)
             }
             else {
-                println "Excluding section ${section.attribute('id')}"
+                logger.info "Excluding section ${section.attribute('id')}"
             }
         }
         return result
@@ -127,7 +127,7 @@ $COPY
 
         cli.h(longOpt:'help', 'Displays this help message')
         cli.v(longOpt:'version', 'Displays the current application version')
-        cli.m(longOpt: 'minimize', 'Removes unused sections from the output file')
+        cli.m(longOpt:'minimize', 'Removes unused sections from the output file')
         cli.c(longOpt:'conf', args:1, 'The path to the tool_conf.xml file to edit')
         cli.o(longOpt:'output', args:1, 'Where the edited file will be saved.')
         cli.i(longOpt:'include', args:1, 'Include directory searched when looking for scripts')
@@ -148,7 +148,6 @@ $COPY
             println ""
             println "ToolConfEditor v${Version.version}"
             println COPY
-//            println "Copyright $copyright 2016 The Language Application Grid"
             println ""
             return
         }
@@ -176,21 +175,6 @@ $COPY
                 return
             }
         }
-
-//        PrintStream out = System.out
-//        boolean close = false
-//        if (params.o) {
-//            File outputFile = new File(params.o)
-//            File parent = outputFile.parentFile
-//            if (!parent.exists()) {
-//                if (!parent.mkdirs()) {
-//                    println "Unable to write to ${parent.path}"
-//                    return
-//                }
-//            }
-//            out = new PrintStream(outputFile)
-//            close = true
-//        }
 
         ToolConfEditor app = new ToolConfEditor()
         app.minimize = params.m
